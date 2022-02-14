@@ -23,6 +23,7 @@ STR_MAX_LEN = 300
 class Classroom(Model):
     title = CharField(max_length=STR_MAX_LEN)
     subject = CharField(max_length=STR_MAX_LEN)
+    #teachers = ...
 
     def __str__(self) -> str:
         return self.title[:15] + " " + self.subject[:15]
@@ -31,7 +32,7 @@ class Classroom(Model):
         return Teacher.objects.prefetch_related('classroom').filter(classroom__id=self.id).count()
 
     def count_students(self):
-        return self.students.count()
+        return Student.objects.prefetch_related('classroom').filter(classroom__id=self.id).count()
 
 
 class BaseUser(Model):
@@ -128,6 +129,4 @@ class QuizSet(Model):
     def __str__(self) -> str:
         return f"{self.heading[:25]}"
 
-    # def get_total_marks(self):
-    #     marks =sum([ i for i in self.questions.point])
-    #     return marks
+

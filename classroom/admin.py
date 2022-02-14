@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.db.models import Sum, F
+from django.db.models import Sum, F, Count
 from .models import *
 
 admin.site.site_header = "Quizapp Admin"
@@ -105,7 +105,7 @@ class StudentAdmin(admin.ModelAdmin):
 
 
 # --------------- Option ADMIN -----------------
-@admin.register(Option)
+# @admin.register(Option)
 class OptionAdmin(admin.ModelAdmin):
     list_display = [
         "option_value",
@@ -154,3 +154,5 @@ class QuizsetAdmin(admin.ModelAdmin):
     @admin.display()
     def get_total_marks(self, qset):
         return Question.objects.filter(quizset__id=qset.id).aggregate(Sum('point'))['point__sum']
+
+

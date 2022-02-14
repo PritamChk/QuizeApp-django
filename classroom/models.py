@@ -18,6 +18,7 @@ from django.db.models import (
     ManyToManyField,
     CASCADE,
     SET_NULL,
+    PROTECT
 )
 
 STR_MAX_LEN = 300
@@ -134,8 +135,21 @@ class QuizSet(Model):
 
 
 class QuizEvent(Model):
-    title = CharField(max_length=STR_MAX_LEN,default=uuid4,blank=True)
-    start_date = DateField(default=date.today()+timedelta(days=1),blank=True)
-    start_time = TimeField(default=datetime.now().time(),blank=True)
+    title = CharField(max_length=STR_MAX_LEN,default=uuid4,blank=True,db_index=True)
+    start_date = DateField(default=date.today()+timedelta(days=1),blank=True,db_index=True)
+    start_time = TimeField(default=datetime.now().time(),blank=True,db_index=True)
     exam_duration = DurationField(default=timedelta(hours=1),blank=True)
-    quizset = OneToOneField(QuizSet,on_delete=SET_NULL,null=True)
+    quizset = ForeignKey(QuizSet,on_delete=PROTECT,related_name="quiz_event")
+    
+    class Meta:
+        ordering=[ 
+            "start_date",
+            "start_time",
+            "-exam_duration",
+            "title"
+        ]
+    
+    def __str__(self) -> str:
+        return self.title[:7]+"..."
+
+    

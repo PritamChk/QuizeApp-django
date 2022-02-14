@@ -114,7 +114,8 @@ class QuizEvent(Model):
     start_date = DateField(default=date.today()+timedelta(days=1),blank=True,db_index=True)
     start_time = TimeField(default=datetime.now().time(),blank=True,db_index=True)
     exam_duration = DurationField(default=timedelta(hours=1),blank=True)
-    all_qsets = ManyToManyField("QuizSet",related_name="quiz_event_part",blank=True) 
+    all_qsets = ManyToManyField("QuizSet",related_name="quiz_event_part",blank=True)
+    host_classroom = ForeignKey(Classroom,on_delete=CASCADE,related_name="hosted_quizes")
     # quizsets
     class Meta:
         ordering=[ 

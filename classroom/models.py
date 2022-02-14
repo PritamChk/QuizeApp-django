@@ -146,7 +146,7 @@ class QuizSet(Model):
     update_at = DateTimeField(auto_now=True, editable=False)
     difficulty_level = CharField(max_length=2, choices=LEVEL, default=LEVEL_EASY)
     author_teacher = ForeignKey(Teacher, on_delete=CASCADE, related_name='quizsets')
-    quiz_event = ForeignKey(QuizEvent,on_delete=SET_NULL,null=True,related_name="quizsets")
+    quiz_event = ForeignKey(QuizEvent,on_delete=SET_NULL,null=True,blank=True,related_name="quizsets")
     #questions = ...
 
     class Meta:

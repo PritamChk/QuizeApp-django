@@ -48,12 +48,19 @@ class BaseUser(Model):
         ordering = ["first_name", "last_name", "-joined_at"]
 
     def __str__(self) -> str:
+        return f"{self.id}"
+    
+    def full_name(self):
         return f"{self.first_name} {self.last_name}"
+        
 
 
 class Teacher(BaseUser):
     classroom = ManyToManyField(
         "Classroom", related_name="teachers", blank=True)
+
+    class Meta(BaseUser.Meta):
+        pass
 
     def count_classroom(self):
         count_class = self.classroom.count()
@@ -62,6 +69,9 @@ class Teacher(BaseUser):
 
 class Student(BaseUser):
     classroom = ManyToManyField(Classroom, related_name="students", blank=True)
+
+    class Meta(BaseUser.Meta):
+        pass
 
     def count_classroom(self):
         count_class = self.classroom.count()
@@ -109,7 +119,7 @@ class QuizSet(Model):
     dificulty_level = CharField(
         max_length=2, choices=LEVEL, default=LEVEL_EASY)
     author_teacher = ForeignKey(
-        Teacher, on_delete=SET_NULL, related_name='quizsets')
+        Teacher, on_delete=CASCADE, related_name='quizsets')
     #questions = ...
 
     class Meta:

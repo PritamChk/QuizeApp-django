@@ -102,6 +102,7 @@ class Option(Model):
         max_length=500, default="None Of The Above", blank=True)
     is_correct = BooleanField(default=False, editable=True)
     qustion = ForeignKey(Question, on_delete=CASCADE, related_name="options")
+    # belongs_to_quiz_set = ForeignKey("QuizSet",on_delete=CASCADE,related_name="qus_options")
 
     def __str__(self) -> str:
         return self.option_value.lower()[:15]
@@ -113,6 +114,7 @@ class QuizEvent(Model):
     start_date = DateField(default=date.today()+timedelta(days=1),blank=True,db_index=True)
     start_time = TimeField(default=datetime.now().time(),blank=True,db_index=True)
     exam_duration = DurationField(default=timedelta(hours=1),blank=True)
+    all_qsets = ManyToManyField("QuizSet",related_name="quiz_event_part",blank=True) 
     # quizsets
     class Meta:
         ordering=[ 

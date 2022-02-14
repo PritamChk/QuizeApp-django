@@ -161,7 +161,7 @@ class QuizsetAdmin(admin.ModelAdmin):
     list_editable = ("difficulty_level",)
     inlines = [
         QustionsInline,
-        # QuizEventInline,
+        # OptionInline,
     ]
     search_fields = [
         "heading__icontains",

@@ -7,6 +7,20 @@ admin.site.site_title = "Admin Section"
 
 
 # -------------  inline classes -------------
+# ---------- QuizEvent Inline ---------
+class QuizSetInline(admin.TabularInline):
+    model = QuizSet
+    extra=0
+    min_num = 0
+    max_num = 20
+
+# class QuizEventInline(admin.TabularInline):
+#     model = QuizEvent
+#     extra=0
+#     min_num = 0
+#     max_num = 20
+        
+    
 class OptionInline(admin.TabularInline):
     model = Option
     min_num = 2
@@ -135,7 +149,8 @@ class QustionAdmin(admin.ModelAdmin):
 @admin.register(QuizSet)
 class QuizsetAdmin(admin.ModelAdmin):
     autocomplete_fields = [
-        "author_teacher"
+        "author_teacher",
+        "quiz_event",
     ]
 
     list_display = (
@@ -144,7 +159,10 @@ class QuizsetAdmin(admin.ModelAdmin):
         "get_total_marks"
     )
     list_editable = ("difficulty_level",)
-    inlines = [QustionsInline]
+    inlines = [
+        QustionsInline,
+        # QuizEventInline,
+    ]
     search_fields = [
         "heading__icontains",
         "heading__istartswith",
@@ -156,3 +174,13 @@ class QuizsetAdmin(admin.ModelAdmin):
         return Question.objects.filter(quizset__id=qset.id).aggregate(Sum('point'))['point__sum']
 
 
+
+@admin.register(QuizEvent)
+class QuizEventAdmin(admin.ModelAdmin):
+    search_fields = [
+        "title__icontains",
+        "title__istartswith",
+        "title__iendswith",
+    ]
+    list_display = ("title","start_date","start_time","exam_duration")
+    # inlines = [QuizSetInline]

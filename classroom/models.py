@@ -107,6 +107,27 @@ class Option(Model):
         return self.option_value.lower()[:15]
 
 
+
+class QuizEvent(Model):
+    title = CharField(max_length=STR_MAX_LEN,default=uuid4,blank=True,db_index=True)
+    start_date = DateField(default=date.today()+timedelta(days=1),blank=True,db_index=True)
+    start_time = TimeField(default=datetime.now().time(),blank=True,db_index=True)
+    exam_duration = DurationField(default=timedelta(hours=1),blank=True)
+    # quizsets
+    class Meta:
+        ordering=[ 
+            "start_date",
+            "start_time",
+            "-exam_duration",
+            "title"
+        ]
+    
+    def __str__(self) -> str:
+        return self.title[:7]+"..."
+
+
+
+
 class QuizSet(Model):
     LEVEL_EASY = "E"
     LEVEL_MEDIUM = "M"
@@ -121,35 +142,16 @@ class QuizSet(Model):
                         default=uuid4, db_index=True, blank=True)
     created_at = DateTimeField(auto_now_add=True, db_index=True)
     update_at = DateTimeField(auto_now=True, editable=False)
-    difficulty_level = CharField(
-        max_length=2, choices=LEVEL, default=LEVEL_EASY)
-    author_teacher = ForeignKey(
-        Teacher, on_delete=CASCADE, related_name='quizsets')
+    difficulty_level = CharField(max_length=2, choices=LEVEL, default=LEVEL_EASY)
+    author_teacher = ForeignKey(Teacher, on_delete=CASCADE, related_name='quizsets')
+    quiz_event = ForeignKey(QuizEvent,on_delete=SET_NULL,null=True,related_name="quizsets")
     #questions = ...
 
     class Meta:
         ordering = ["-created_at", "difficulty_level"]
 
     def __str__(self) -> str:
-        return f"{self.heading[:25]}"
+        return f"{self.heading[:10]}"
 
-
-class QuizEvent(Model):
-    title = CharField(max_length=STR_MAX_LEN,default=uuid4,blank=True,db_index=True)
-    start_date = DateField(default=date.today()+timedelta(days=1),blank=True,db_index=True)
-    start_time = TimeField(default=datetime.now().time(),blank=True,db_index=True)
-    exam_duration = DurationField(default=timedelta(hours=1),blank=True)
-    quizset = ForeignKey(QuizSet,on_delete=PROTECT,related_name="quiz_event")
-    
-    class Meta:
-        ordering=[ 
-            "start_date",
-            "start_time",
-            "-exam_duration",
-            "title"
-        ]
-    
-    def __str__(self) -> str:
-        return self.title[:7]+"..."
 
     

@@ -48,7 +48,7 @@ class BaseUser(Model):
         ordering = ["first_name", "last_name", "-joined_at"]
 
     def __str__(self) -> str:
-        return f"{self.id}"
+        return f"{self.first_name} {self.last_name}"
     
     def full_name(self):
         return f"{self.first_name} {self.last_name}"
@@ -79,7 +79,7 @@ class Student(BaseUser):
 
 
 class Question(Model):
-    qustion_value = TextField()
+    question_value = TextField()
     point = PositiveSmallIntegerField(default=1, validators=[MaxValueValidator(
         15, "Hya hya, 1ta mcq tei 100 marks diye dao,Ajob Public")])
     updated_at = DateTimeField(auto_now=True)
@@ -93,8 +93,8 @@ class Question(Model):
         return self.question_value.lower()[:20]
 
 
-class Options(Model):
-    option_value = TextField()
+class Option(Model):
+    option_value = CharField(max_length=500,default="None Of The Above",blank=True)
     is_correct = BooleanField(default=False, editable=True)
     qustion = ForeignKey(Question, on_delete=CASCADE, related_name="options")
 
@@ -103,9 +103,9 @@ class Options(Model):
 
 
 class QuizSet(Model):
-    LEVEL_EASY = 0
-    LEVEL_MEDIUM = 1
-    LEVEL_HARD = 2
+    LEVEL_EASY = "E"
+    LEVEL_MEDIUM = "M"
+    LEVEL_HARD = "H"
     LEVEL = [
         (LEVEL_EASY, "Easy"),
         (LEVEL_MEDIUM, "Medium"),
@@ -116,17 +116,18 @@ class QuizSet(Model):
                         default=uuid4, db_index=True, blank=True)
     created_at = DateTimeField(auto_now_add=True, db_index=True)
     update_at = DateTimeField(auto_now=True, editable=False)
-    dificulty_level = CharField(
+    difficulty_level = CharField(
         max_length=2, choices=LEVEL, default=LEVEL_EASY)
     author_teacher = ForeignKey(
         Teacher, on_delete=CASCADE, related_name='quizsets')
     #questions = ...
 
     class Meta:
-        ordering = ["-created_at", "dificulty_level"]
+        ordering = ["-created_at", "difficulty_level"]
 
     def __str__(self) -> str:
-        return f"{self.id} - {self.heading[:25]}"
+        return f"{self.heading[:25]}"
 
-    def get_teacher_count_for_each_quizset(self):
-        return self.author_teacher.count()
+    # def get_total_marks(self):
+    #     marks =sum([ i for i in self.questions.point])
+    #     return marks

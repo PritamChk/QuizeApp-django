@@ -49,10 +49,9 @@ class BaseUser(Model):
 
     def __str__(self) -> str:
         return f"{self.first_name} {self.last_name}"
-    
+
     def full_name(self):
         return f"{self.first_name} {self.last_name}"
-        
 
 
 class Teacher(BaseUser):
@@ -94,7 +93,8 @@ class Question(Model):
 
 
 class Option(Model):
-    option_value = CharField(max_length=500,default="None Of The Above",blank=True)
+    option_value = CharField(
+        max_length=500, default="None Of The Above", blank=True)
     is_correct = BooleanField(default=False, editable=True)
     qustion = ForeignKey(Question, on_delete=CASCADE, related_name="options")
 

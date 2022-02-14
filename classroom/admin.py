@@ -1,32 +1,28 @@
 from django.contrib import admin
-from django.db.models import Sum,F
+from django.db.models import Sum, F
 from .models import *
 
 admin.site.site_header = "Quizapp Admin"
 admin.site.site_title = "Admin Section"
 
-# -------------  inline classes -------------
-# class StudentInline(admin.TabularInline):
-#     model = Student
-#     raw_id_fields = ("classroom",)
-#     min_num = 0
-#     max_num = 10
-#     extra = 0
 
 # -------------  inline classes -------------
 class OptionInline(admin.TabularInline):
     model = Option
     min_num = 2
-    extra=0
+    extra = 0
     max_num = 100
+
 
 class QustionsInline(admin.TabularInline):
     model = Question
-    extra=0
+    extra = 0
     min_num = 0
     max_num = 100
 
 # ---------------- CLASSROOM ADMIN --------------
+
+
 @admin.register(Classroom)
 class ClassroomAdmin(admin.ModelAdmin):
     # inlines = [StudentInline]
@@ -46,6 +42,8 @@ class ClassroomAdmin(admin.ModelAdmin):
 # ---------------- CLASSROOM ADMIN --------------
 
 # --------------- TEACHER ADMIN -----------------
+
+
 @admin.register(Teacher)
 class TeacherAdmin(admin.ModelAdmin):
     list_display = [
@@ -55,6 +53,9 @@ class TeacherAdmin(admin.ModelAdmin):
         "username",
         "count_classroom"
     ]
+    prepopulated_fields = {
+        "username": ["first_name", "last_name"]
+    }
     # list_editable = ["first_name","last_name"]
     readonly_fields = ["last_updated", "joined_at"]
     search_fields = [
@@ -76,6 +77,8 @@ class TeacherAdmin(admin.ModelAdmin):
 # --------------- TEACHER ADMIN -----------------
 
 # --------------- STUDENT ADMIN -----------------
+
+
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
     autocomplete_fields = ["classroom"]
@@ -86,6 +89,9 @@ class StudentAdmin(admin.ModelAdmin):
     ]
     ordering = ["first_name", "last_name"]
     readonly_fields = ["last_updated", "joined_at"]
+    prepopulated_fields = {
+        "username": ["first_name", "last_name"]
+    }
     search_fields = [
         "first_name__icontains",
         "first_name__istartswith",
@@ -94,26 +100,29 @@ class StudentAdmin(admin.ModelAdmin):
         "last_name__istartswith",
         "last_name__iendswith",
     ]
+
 # --------------- STUDENT ADMIN -----------------
 
 
 # --------------- Option ADMIN -----------------
 @admin.register(Option)
 class OptionAdmin(admin.ModelAdmin):
-    list_display = [ 
+    list_display = [
         "option_value",
         "is_correct",
-        "qustion",                
+        "qustion",
     ]
     list_editable = ["is_correct"]
 
 # --------------- Question ADMIN -----------------
+
+
 @admin.register(Question)
 class QustionAdmin(admin.ModelAdmin):
-    list_display = [ 
+    list_display = [
         "question_value",
-        "point"   ,
-        "quizset"             
+        "point",
+        "quizset"
     ]
     list_editable = ["point"]
     inlines = [OptionInline]
@@ -121,12 +130,14 @@ class QustionAdmin(admin.ModelAdmin):
         "quizset"
     ]
 # --------------- QuizSet ADMIN -----------------
+
+
 @admin.register(QuizSet)
 class QuizsetAdmin(admin.ModelAdmin):
     autocomplete_fields = [
-            "author_teacher"
-        ]
-    
+        "author_teacher"
+    ]
+
     list_display = (
         "heading",
         "difficulty_level",
@@ -139,7 +150,7 @@ class QuizsetAdmin(admin.ModelAdmin):
         "heading__istartswith",
         "heading__iendswith",
     ]
-    
+
     @admin.display()
-    def get_total_marks(self,qset):
+    def get_total_marks(self, qset):
         return Question.objects.filter(quizset__id=qset.id).aggregate(Sum('point'))['point__sum']

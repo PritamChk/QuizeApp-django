@@ -10,7 +10,7 @@ admin.site.site_title = "Admin Section"
 # ---------- QuizEvent Inline ---------
 class QuizSetInline(admin.TabularInline):
     model = QuizSet
-    extra=0
+    extra = 0
     min_num = 0
     max_num = 20
 
@@ -20,8 +20,7 @@ class QuizSetInline(admin.TabularInline):
 #     min_num = 0
 #     max_num = 20
 
-       
-    
+
 class OptionInline(admin.TabularInline):
     model = Option
     min_num = 2
@@ -54,10 +53,11 @@ class ClassroomAdmin(admin.ModelAdmin):
                      "subject__istartswith"]
     ordering = ["-title", "subject"]
     list_editable = ["subject"]
-    
+
     @admin.display()
-    def count_events(self,class_room):
-        return QuizEvent.objects.select_related("host_classroom").filter(host_classroom=class_room).count()
+    def count_events(self, class_room):
+        return QuizEvent.objects.select_related("host_classroom").\
+            filter(host_classroom=class_room).count()
 
 # ---------------- CLASSROOM ADMIN --------------
 
@@ -177,8 +177,8 @@ class QuizsetAdmin(admin.ModelAdmin):
 
     @admin.display()
     def get_total_marks(self, qset):
-        return Question.objects.filter(quizset__id=qset.id).aggregate(Sum('point'))['point__sum']
-
+        return Question.objects.filter(quizset__id=qset.id).\
+            aggregate(Sum('point'))['point__sum']
 
 
 @admin.register(QuizEvent)
@@ -189,7 +189,7 @@ class QuizEventAdmin(admin.ModelAdmin):
         "title__iendswith",
         # "host_classroom_name",
     ]
-    autocomplete_fields = [ 
+    autocomplete_fields = [
         "host_classroom",
     ]
     list_display = (
@@ -203,7 +203,7 @@ class QuizEventAdmin(admin.ModelAdmin):
     #     "host_classroom_name",
     # )
     # inlines = [QuizSetInline]
-    
+
     # @admin.display()
     # def host_classroom_name(self,obj:QuizEvent):
     #     return Classroom.objects.prefetch_related('hosted_quizes') \

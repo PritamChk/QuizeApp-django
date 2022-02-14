@@ -1,5 +1,5 @@
 from uuid import uuid4
-from datetime import date, datetime,time,timedelta,timezone
+from datetime import date, datetime, time, timedelta, timezone
 from django.core.validators import MaxValueValidator
 from django.db.models import (
     Model,
@@ -108,27 +108,30 @@ class Option(Model):
         return self.option_value.lower()[:15]
 
 
-
 class QuizEvent(Model):
-    title = CharField(max_length=STR_MAX_LEN,default=uuid4,blank=True,db_index=True)
-    start_date = DateField(default=date.today()+timedelta(days=1),blank=True,db_index=True)
-    start_time = TimeField(default=datetime.now().time(),blank=True,db_index=True)
-    exam_duration = DurationField(default=timedelta(hours=1),blank=True)
-    all_qsets = ManyToManyField("QuizSet",related_name="quiz_event_part",blank=True)
-    host_classroom = ForeignKey(Classroom,on_delete=CASCADE,related_name="hosted_quizes")
+    title = CharField(max_length=STR_MAX_LEN, default=uuid4,
+                      blank=True, db_index=True)
+    start_date = DateField(default=date.today() +
+                           timedelta(days=1), blank=True, db_index=True)
+    start_time = TimeField(default=datetime.now().time(),
+                           blank=True, db_index=True)
+    exam_duration = DurationField(default=timedelta(hours=1), blank=True)
+    all_qsets = ManyToManyField(
+        "QuizSet", related_name="quiz_event_part", blank=True)
+    host_classroom = ForeignKey(
+        Classroom, on_delete=CASCADE, related_name="hosted_quizes")
     # quizsets
+
     class Meta:
-        ordering=[ 
+        ordering = [
             "start_date",
             "start_time",
             "-exam_duration",
             "title"
         ]
-    
+
     def __str__(self) -> str:
         return self.title[:7]+"..."
-
-
 
 
 class QuizSet(Model):
@@ -145,9 +148,12 @@ class QuizSet(Model):
                         default=uuid4, db_index=True, blank=True)
     created_at = DateTimeField(auto_now_add=True, db_index=True)
     update_at = DateTimeField(auto_now=True, editable=False)
-    difficulty_level = CharField(max_length=2, choices=LEVEL, default=LEVEL_EASY)
-    author_teacher = ForeignKey(Teacher, on_delete=CASCADE, related_name='quizsets')
-    quiz_event = ForeignKey(QuizEvent,on_delete=SET_NULL,null=True,blank=True,related_name="quizsets")
+    difficulty_level = CharField(
+        max_length=2, choices=LEVEL, default=LEVEL_EASY)
+    author_teacher = ForeignKey(
+        Teacher, on_delete=CASCADE, related_name='quizsets')
+    quiz_event = ForeignKey(QuizEvent, on_delete=SET_NULL,
+                            null=True, blank=True, related_name="quizsets")
     #questions = ...
 
     class Meta:
@@ -155,6 +161,3 @@ class QuizSet(Model):
 
     def __str__(self) -> str:
         return f"{self.heading[:10]}"
-
-
-    

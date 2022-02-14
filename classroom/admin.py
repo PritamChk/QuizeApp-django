@@ -19,7 +19,8 @@ class QuizSetInline(admin.TabularInline):
 #     extra=0
 #     min_num = 0
 #     max_num = 20
-        
+
+       
     
 class OptionInline(admin.TabularInline):
     model = Option
@@ -45,6 +46,7 @@ class ClassroomAdmin(admin.ModelAdmin):
         "subject",
         "count_teachers",
         "count_students",
+        "count_events",
     ]
     search_fields = ["title__icontains",
                      "title__istartswith",
@@ -52,6 +54,10 @@ class ClassroomAdmin(admin.ModelAdmin):
                      "subject__istartswith"]
     ordering = ["-title", "subject"]
     list_editable = ["subject"]
+    
+    @admin.display()
+    def count_events(self,class_room):
+        return QuizEvent.objects.select_related("host_classroom").filter(host_classroom=class_room).count()
 
 # ---------------- CLASSROOM ADMIN --------------
 
@@ -181,6 +187,24 @@ class QuizEventAdmin(admin.ModelAdmin):
         "title__icontains",
         "title__istartswith",
         "title__iendswith",
+        # "host_classroom_name",
     ]
-    list_display = ("title","start_date","start_time","exam_duration")
+    autocomplete_fields = [ 
+        "host_classroom",
+    ]
+    list_display = (
+        "title",
+        "start_date",
+        "start_time",
+        "exam_duration"
+    )
+    # list_editable = (
+    #     # "host_classroom",
+    #     "host_classroom_name",
+    # )
     # inlines = [QuizSetInline]
+    
+    # @admin.display()
+    # def host_classroom_name(self,obj:QuizEvent):
+    #     return Classroom.objects.prefetch_related('hosted_quizes') \
+    #             .filter(hosted_quizes__id = obj.id).heading

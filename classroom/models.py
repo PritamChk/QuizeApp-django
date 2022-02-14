@@ -30,7 +30,7 @@ class Classroom(Model):
         return self.students.count()
 
 
-class Teacher(Model):
+class BaseUser(Model):
     first_name = CharField(max_length=STR_MAX_LEN)
     last_name = CharField(max_length=STR_MAX_LEN)
     email = EmailField(unique=True, db_index=True)
@@ -38,6 +38,12 @@ class Teacher(Model):
     password = CharField(max_length=STR_MAX_LEN)
     joined_at = DateTimeField(auto_now_add=True, editable=False)
     last_updated = DateTimeField(auto_now=True, editable=False)
+    
+    class Meta:
+        abstract = True
+    
+
+class Teacher(BaseUser):
     classroom = ManyToManyField(
         "Classroom", related_name="teachers", blank=True)
 
@@ -49,14 +55,7 @@ class Teacher(Model):
         return count_class
 
 
-class Student(Model):
-    first_name = CharField(max_length=STR_MAX_LEN)
-    last_name = CharField(max_length=STR_MAX_LEN)
-    email = EmailField(unique=True, db_index=True)
-    username = CharField(max_length=60, unique=True, db_index=True)
-    password = CharField(max_length=STR_MAX_LEN)
-    joined_at = DateTimeField(auto_now_add=True, editable=False)
-    last_updated = DateTimeField(auto_now=True, editable=False)
+class Student(BaseUser):
     classroom = ManyToManyField(Classroom, related_name="students", blank=True)
 
     def __str__(self) -> str:

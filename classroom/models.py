@@ -1,10 +1,13 @@
 from uuid import uuid4
+from datetime import date, datetime,time,timedelta,timezone
 from django.core.validators import MaxValueValidator
 from django.db.models import (
     Model,
     CharField,
     DateField,
     DateTimeField,
+    TimeField,
+    DurationField,
     UUIDField,
     EmailField,
     PositiveSmallIntegerField,
@@ -130,3 +133,9 @@ class QuizSet(Model):
         return f"{self.heading[:25]}"
 
 
+class QuizEvent(Model):
+    title = CharField(max_length=STR_MAX_LEN,default=uuid4,blank=True)
+    start_date = DateField(default=date.today()+timedelta(days=1),blank=True)
+    start_time = TimeField(default=datetime.now().time(),blank=True)
+    exam_duration = DurationField(default=timedelta(hours=1),blank=True)
+    quizset = OneToOneField(QuizSet,on_delete=SET_NULL,null=True)

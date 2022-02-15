@@ -1,25 +1,16 @@
-from uuid import uuid4
 from datetime import date, datetime, time, timedelta, timezone
+from uuid import uuid4
+
 from django.core.validators import MaxValueValidator
 from django.db.models import (
-    Model,
-    CharField,
-    DateField,
-    DateTimeField,
-    TimeField,
-    DurationField,
-    UUIDField,
-    EmailField,
-    PositiveSmallIntegerField,
-    TextField,
-    BooleanField,
-    ForeignKey,
-    OneToOneField,
-    ManyToManyField,
-    CASCADE,
-    SET_NULL,
-    PROTECT
+    CASCADE, PROTECT, SET_NULL, BooleanField,
+    CharField, DateField, DateTimeField,
+    DurationField, EmailField, ForeignKey,
+    IntegerField, ManyToManyField, Model,
+    OneToOneField, PositiveSmallIntegerField,
+    TextField, TimeField, UUIDField
 )
+from django.forms import IntegerField
 
 STR_MAX_LEN = 300
 
@@ -161,3 +152,32 @@ class QuizSet(Model):
 
     def __str__(self) -> str:
         return f"{self.heading[:10]}"
+
+
+class AnswerSet(Model):
+    id = UUIDField(primary_key=True,default=uuid4,editable=False)
+    quizevent = ForeignKey(QuizEvent,on_delete=PROTECT,related_name="answer_sets")
+    created_at = DateField(auto_now_add=True)
+    updated_at = DateField(auto_now=True)
+    # answers = ...
+    class Meta:
+        ordering = ["-created_at"]
+    
+    def __str__(self):
+        return str(self.id)
+    
+class Answer(Model):
+    qid = IntegerField()
+    qzid = IntegerField()
+    optid = IntegerField() 
+    created_at = DateField(auto_now_add=True)
+    updated_at = DateField(auto_now=True)
+    student = ForeignKey(Student,on_delete=CASCADE,related_name='answers')
+    answer_set = ForeignKey(AnswerSet,on_delete=PROTECT,related_name='answers') 
+    
+    # class Meta:
+    #     ordering = [ 
+    #         "created_at",
+    #         "quizset_id",
+    #         "qus_id"
+    #     ]

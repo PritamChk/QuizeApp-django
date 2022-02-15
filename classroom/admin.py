@@ -218,3 +218,44 @@ class QuizEventAdmin(admin.ModelAdmin):
     # def host_classroom_name(self,obj:QuizEvent):
     #     return Classroom.objects.prefetch_related('hosted_quizes') \
     #             .filter(hosted_quizes__id = obj.id).heading
+
+class AnswerInline(admin.TabularInline):
+    model = Answer
+    extra=0
+    min_num=0
+    max_num = 100
+
+
+@admin.register(AnswerSet)
+class AnswerSetAdmin(admin.ModelAdmin):
+    list_display = (
+        'id', 
+        # 'quizevent', 
+        'created_at', 
+        'updated_at'
+    )
+    # select_related_fields = ["quizevent"]
+    list_filter = ('quizevent', 'created_at', 'updated_at')
+    date_hierarchy = 'created_at'
+    inlines = [AnswerInline]
+
+
+@admin.register(Answer)
+class AnswerAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        "qzid",
+        "qid",
+        "optid",
+        'created_at',
+        'updated_at',
+        'student',
+        'answer_set',
+    )
+    list_editable = (
+        "qzid",
+        "qid",
+        "optid",          
+    )
+    list_filter = ('created_at', 'updated_at', 'student', 'answer_set')
+    date_hierarchy = 'created_at'

@@ -10,7 +10,6 @@ from django.db.models import (
     OneToOneField, PositiveSmallIntegerField,
     TextField, TimeField, UUIDField
 )
-from django.forms import IntegerField
 
 STR_MAX_LEN = 300
 

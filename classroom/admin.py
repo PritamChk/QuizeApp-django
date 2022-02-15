@@ -132,14 +132,20 @@ class StudentAdmin(admin.ModelAdmin):
 
 
 # --------------- Option ADMIN -----------------
-# @admin.register(Option)
+@admin.register(Option)
 class OptionAdmin(admin.ModelAdmin):
     list_display = [
         "option_value",
+        "id",
         "is_correct",
         "qustion",
     ]
     list_editable = ["is_correct"]
+    list_filter = (
+        'is_correct',
+        "qustion",
+        # "get_qus_id"
+    )
 
 # --------------- Question ADMIN -----------------
 
@@ -148,6 +154,7 @@ class OptionAdmin(admin.ModelAdmin):
 class QustionAdmin(admin.ModelAdmin):
     list_display = [
         "question_value",
+        "id",
         "point",
         "quizset"
     ]
@@ -169,6 +176,7 @@ class QuizsetAdmin(admin.ModelAdmin):
 
     list_display = (
         "heading",
+        "id",
         "difficulty_level",
         "get_total_marks"
     )

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     # - 3rd party plugins
     'debug_toolbar',
     'django_extensions',
+    "rest_framework",
     # - own app
     'classroom',
 ]

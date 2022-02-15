@@ -47,6 +47,7 @@ class ClassroomAdmin(admin.ModelAdmin):
         "count_students",
         "count_events",
     ]
+    list_filter = ["subject"]
     search_fields = ["title__icontains",
                      "title__istartswith",
                      "subject__icontains",
@@ -66,6 +67,7 @@ class ClassroomAdmin(admin.ModelAdmin):
 
 @admin.register(Teacher)
 class TeacherAdmin(admin.ModelAdmin):
+    date_hierarchy = 'joined_at'
     list_display = [
         "full_name",
         # "first_name",
@@ -73,9 +75,11 @@ class TeacherAdmin(admin.ModelAdmin):
         "username",
         "count_classroom"
     ]
+    list_filter = ('joined_at', 'last_updated')
     prepopulated_fields = {
         "username": ["first_name", "last_name"]
     }
+    raw_id_fields = ('classroom',)
     # list_editable = ["first_name","last_name"]
     readonly_fields = ["last_updated", "joined_at"]
     search_fields = [
@@ -102,16 +106,19 @@ class TeacherAdmin(admin.ModelAdmin):
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
     autocomplete_fields = ["classroom"]
+    date_hierarchy = 'joined_at'
     list_display = [
         "full_name",
         "username",
         "count_classroom"
     ]
+    list_filter = ('joined_at', 'last_updated')
     ordering = ["first_name", "last_name"]
     readonly_fields = ["last_updated", "joined_at"]
     prepopulated_fields = {
         "username": ["first_name", "last_name"]
     }
+    raw_id_fields = ('classroom',)
     search_fields = [
         "first_name__icontains",
         "first_name__istartswith",
@@ -145,6 +152,7 @@ class QustionAdmin(admin.ModelAdmin):
         "quizset"
     ]
     list_editable = ["point"]
+    list_filter = ('updated_at', 'quizset')
     inlines = [OptionInline]
     autocomplete_fields = [
         "quizset"
@@ -165,6 +173,7 @@ class QuizsetAdmin(admin.ModelAdmin):
         "get_total_marks"
     )
     list_editable = ("difficulty_level",)
+    list_filter = ('created_at', 'update_at', 'author_teacher', "difficulty_level", 'quiz_event')
     inlines = [
         QustionsInline,
         # OptionInline,
@@ -202,6 +211,7 @@ class QuizEventAdmin(admin.ModelAdmin):
     #     # "host_classroom",
     #     "host_classroom_name",
     # )
+    list_filter = ('start_date', 'host_classroom')
     # inlines = [QuizSetInline]
 
     # @admin.display()

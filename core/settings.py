@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # - 3rd party plugins
     'debug_toolbar',
+    'django_extensions',
     # - own app
     'classroom',
 ]

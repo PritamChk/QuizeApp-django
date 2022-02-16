@@ -1,2 +1,2 @@
-from .serializers.classroom_serializer import ClassRoomSerializer
+from .serializers.classroom_sz import ClassRoomSerializer
 from .serializers.teacher_sz import TeacherSerializer

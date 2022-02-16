@@ -19,6 +19,7 @@ class TeacherSerializer(ms):
                 "id",
                 "no_of_classrooms",
             ]
+        # write_only_fields =["password"]
         extra_kwargs = {
                 "password":{
                     "write_only":True

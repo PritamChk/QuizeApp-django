@@ -152,7 +152,7 @@ class QuizSet(Model):
 
     def __str__(self) -> str:
         return f"{self.heading[:10]}"
-
+    
 
 class AnswerSet(Model):
     id = UUIDField(primary_key=True,default=uuid4,editable=False)

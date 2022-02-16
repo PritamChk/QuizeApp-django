@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "36df1d0dae7bc60a2fbfc481283681287c0f418e5f6a1adfb0c8c0025628dcf4"
+            "sha256": "a7ff2a2c511d40a28d12dd4f25290a150bbe61f4c9f94c5443c810bda527ddb5"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -39,6 +39,14 @@
             ],
             "index": "pypi",
             "version": "==3.13.1"
+        },
+        "drf-nested-routers": {
+            "hashes": [
+                "sha256:01aa556b8c08608bb74fb34f6ca065a5183f2cda4dc0478192cc17a2581d71b0",
+                "sha256:996b77f3f4dfaf64569e7b8f04e3919945f90f95366838ca5b8bed9dd709d6c5"
+            ],
+            "index": "pypi",
+            "version": "==0.93.4"
         },
         "mysqlclient": {
             "hashes": [

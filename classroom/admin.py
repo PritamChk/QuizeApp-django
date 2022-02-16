@@ -81,7 +81,7 @@ class TeacherAdmin(admin.ModelAdmin):
     }
     raw_id_fields = ('classroom',)
     # list_editable = ["first_name","last_name"]
-    readonly_fields = ["last_updated", "joined_at"]
+    readonly_fields = ["id","last_updated", "joined_at"]
     search_fields = [
         "first_name__icontains",
         "first_name__istartswith",

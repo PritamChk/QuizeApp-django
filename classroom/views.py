@@ -1,5 +1,18 @@
-from django.http import HttpRequest
-from django.shortcuts import render
+from multiprocessing import context
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
-def hello(request:HttpRequest):
-    return render(request,'index.html',context={"name":"pritam"})
+from .models import (
+        Classroom,
+    )
+from .serializer import (
+        ClassRoomSerializer,
+    )
+
+class ClassRoomListView(APIView):
+    def get(self,request):
+        qset = Classroom.objects.all()
+        ser = ClassRoomSerializer(qset,many=True,context={'request':request})
+        return Response(ser.data)
+        
+

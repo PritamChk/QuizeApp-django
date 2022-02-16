@@ -42,7 +42,7 @@ class QuestionSerializer(ms):
         # depth = 1
     
 class QuizSetSerializer(ms):
-    questions= QuestionSerializer(Question)
+    # questions= QuestionSerializer(Question)
     class Meta:
         model = QuizSet
         fields = [
@@ -60,5 +60,5 @@ class QuizSetSerializer(ms):
                     "write_only":True
                     }
                 }
-    def get_questions(self,obj:QuizSet):
-        return QuizSet.objects.prefetch_related('qustions').all()
+    # def get_questions(self,obj:QuizSet):
+    #     return QuizSet.objects.prefetch_related('qustions').all()

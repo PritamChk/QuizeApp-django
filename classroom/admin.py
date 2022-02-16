@@ -178,7 +178,8 @@ class QuizsetAdmin(admin.ModelAdmin):
         "heading",
         "id",
         "difficulty_level",
-        "get_total_marks"
+        "get_total_marks",
+        # "get_qus  tions"
     )
     list_editable = ("difficulty_level",)
     list_filter = ('created_at', 'update_at', 'author_teacher', "difficulty_level", 'quiz_event')

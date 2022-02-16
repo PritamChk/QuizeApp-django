@@ -72,33 +72,6 @@ class Student(BaseUser):
         count_class = self.classroom.count()
         return count_class
 
-
-class Question(Model):
-    question_value = TextField()
-    point = PositiveSmallIntegerField(default=1, validators=[MaxValueValidator(
-        15, "Hya hya, 1ta mcq tei 100 marks diye dao,Ajob Public")])
-    updated_at = DateTimeField(auto_now=True)
-    quizset = ForeignKey("QuizSet", on_delete=CASCADE, related_name="qustions")
-    #options = ...
-
-    class Meta:
-        ordering = ["point"]
-
-    def __str__(self) -> str:
-        return self.question_value.lower()[:20]
-
-
-class Option(Model):
-    option_value = CharField(
-        max_length=500, default="None Of The Above", blank=True)
-    is_correct = BooleanField(default=False, editable=True)
-    qustion = ForeignKey(Question, on_delete=CASCADE, related_name="options")
-    # belongs_to_quiz_set = ForeignKey("QuizSet",on_delete=CASCADE,related_name="qus_options")
-
-    def __str__(self) -> str:
-        return self.option_value.lower()[:15]
-
-
 class QuizEvent(Model):
     title = CharField(max_length=STR_MAX_LEN, default=uuid4,
                       blank=True, db_index=True)
@@ -144,14 +117,44 @@ class QuizSet(Model):
     author_teacher = ForeignKey(
         Teacher, on_delete=CASCADE, related_name='quizsets')
     quiz_event = ForeignKey(QuizEvent, on_delete=SET_NULL,
-                            null=True, blank=True, related_name="quizsets")
-    #questions = ...
-
+                                null=True, blank=True, related_name="quizsets")
+    # questions = One
+    
     class Meta:
         ordering = ["-created_at", "difficulty_level"]
 
     def __str__(self) -> str:
         return f"{self.heading[:10]}"
+
+    # def get_qustions(self):
+    #     return list(map(lambda x:x.id,Question.objects.prefetch_related('quizset').filter(quizset=self.id)))
+
+class Question(Model):
+    question_value = TextField()
+    point = PositiveSmallIntegerField(default=1, validators=[MaxValueValidator(
+        15, "Hya hya, 1ta mcq tei 100 marks diye dao,Ajob Public")])
+    updated_at = DateTimeField(auto_now=True)
+    quizset = ForeignKey(QuizSet, on_delete=CASCADE, related_name="qustions")
+    #options = ...
+
+    class Meta:
+        ordering = ["point"]
+
+    def __str__(self) -> str:
+        return self.question_value.lower()[:20]
+
+
+class Option(Model):
+    option_value = CharField(
+        max_length=500, default="None Of The Above", blank=True)
+    is_correct = BooleanField(default=False, editable=True)
+    qustion = ForeignKey(Question, on_delete=CASCADE, related_name="options")
+    # belongs_to_quiz_set = ForeignKey("QuizSet",on_delete=CASCADE,related_name="qus_options")
+
+    def __str__(self) -> str:
+        return self.option_value.lower()[:15]
+
+
     
 
 class AnswerSet(Model):

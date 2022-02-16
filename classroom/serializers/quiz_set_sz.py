@@ -1,6 +1,7 @@
 from rest_framework.serializers import (
     ModelSerializer as ms ,
     SerializerMethodField as method_field,
+    PrimaryKeyRelatedField as pkf,
     )
 
 from ..models import Option, Question, QuizEvent, QuizSet
@@ -41,6 +42,7 @@ class QuestionSerializer(ms):
         # depth = 1
     
 class QuizSetSerializer(ms):
+    questions= QuestionSerializer(Question)
     class Meta:
         model = QuizSet
         fields = [
@@ -48,13 +50,15 @@ class QuizSetSerializer(ms):
             "heading",
             "difficulty_level",
             "author_teacher",
-            # "questions__id"
+            "questions"
         ]    
         read_only_fields = ["id"]
         # author_teacher = TeacherSerializer(many=True)
-        depth = 1
+        # depth = 1
         extra_kwargs = {
                 "password":{
                     "write_only":True
                     }
                 }
+    def get_questions(self,obj:QuizSet):
+        return QuizSet.objects.prefetch_related('qustions').all()

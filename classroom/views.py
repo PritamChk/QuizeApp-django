@@ -1,10 +1,6 @@
 from rest_framework.generics import ListCreateAPIView
-from rest_framework.response import Response
-from rest_framework.request import Request
-from rest_framework import status as S
 from django.db.models import F
 
-from classroom.serializers.quiz_set_sz import QuestionSerializer
 
 
 from .models import (
@@ -17,8 +13,8 @@ from .serializer import (
         ClassRoomSerializer,
         TeacherSerializer,
         QuizSetSerializer,
+        QuestionSerializer,
     )
-from classroom import serializer
 
 class ClassRoomListView(ListCreateAPIView):
     queryset = Classroom.objects.all()
@@ -32,5 +28,9 @@ class TeacherViewList(ListCreateAPIView):
 class QuestionSetViewList(ListCreateAPIView):
     queryset = Question.objects.select_related('quizset').prefetch_related('options').all()
     serializer_class = QuestionSerializer
+
+class QuizSetSetViewList(ListCreateAPIView):
+    queryset = QuizSet.objects.all()
+    serializer_class = QuizSetSerializer
     
             

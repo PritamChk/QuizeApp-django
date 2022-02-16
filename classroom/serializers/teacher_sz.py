@@ -24,7 +24,7 @@ class TeacherSerializer(ms):
                     "write_only":True
                     }
                 }
-        depth = 1
+        # depth = 1
         
     def get_assosiated_classroom_no(self,obj:Teacher)->int:
         return obj.classroom.count()

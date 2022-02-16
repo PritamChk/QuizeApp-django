@@ -18,6 +18,7 @@ class Classroom(Model):
     title = CharField(max_length=STR_MAX_LEN)
     subject = CharField(max_length=STR_MAX_LEN)
     #teachers = ...
+    #students = ...
 
     def __str__(self) -> str:
         return self.title[:15] + " " + self.subject[:15]

@@ -12,7 +12,8 @@ from .serializer import (
 class ClassRoomListView(APIView):
     def get(self,request):
         qset = Classroom.objects.all()
-        ser = ClassRoomSerializer(qset,many=True,context={'request':request})
+        ser = ClassRoomSerializer(qset,many=True)#,context={'request':request})
         return Response(ser.data)
         
+    # def 
 

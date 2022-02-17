@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import ListCreateAPIView
 from django.db.models import F
 
@@ -28,7 +29,7 @@ class ClassRoomListView(ListCreateAPIView):
     serializer_class = ClassRoomSerializer
    
 
-class TeacherViewList(ListCreateAPIView):
+class TeacherViewList(ModelViewSet):
     queryset = Teacher.objects.all()
     serializer_class = TeacherSerializer
 

@@ -42,7 +42,7 @@ class QuestionSerializer(ms):
         # depth = 1
     
 class QuizSetSerializer(ms):
-    # questions= QuestionSerializer(Question)
+    qustions= QuestionSerializer(Question,many=True)
     class Meta:
         model = QuizSet
         fields = [
@@ -50,7 +50,7 @@ class QuizSetSerializer(ms):
             "heading",
             "difficulty_level",
             "author_teacher",
-            "questions"
+            "qustions"
         ]    
         read_only_fields = ["id"]
         # author_teacher = TeacherSerializer(many=True)

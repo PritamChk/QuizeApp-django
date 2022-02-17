@@ -21,3 +21,4 @@ urlpatterns = [
     path('__debug__/', include('debug_toolbar.urls')),
     path('app/', include('classroom.urls')),
 ]
+

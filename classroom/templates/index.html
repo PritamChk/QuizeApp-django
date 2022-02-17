@@ -10,6 +10,10 @@
     <h1>
         hello Django
     </h1>
-    name -> {{ name }}
+    <section>
+        {% for student in students %}
+        <p> {{ student.first_name }} - {{ student.last_name }} </p>
+        {% endfor %}
+    </section>
 </body>
 </html>

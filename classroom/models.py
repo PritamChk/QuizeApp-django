@@ -57,9 +57,10 @@ class Teacher(BaseUser):
     class Meta(BaseUser.Meta):
         pass
 
-    def count_classroom(self):
-        count_class = self.classroom.count()
-        return count_class
+    # def count_classroom(self):
+    #     count_class = self.classroom.count()
+    #     # count_class = Classroom.objects.prefetch_related('teachers').filter(teachers=self).count()
+    #     return count_class
 
 
 class Student(BaseUser):

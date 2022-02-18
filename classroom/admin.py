@@ -79,6 +79,7 @@ class TeacherAdmin(admin.ModelAdmin):
     prepopulated_fields = {
         "username": ["first_name", "last_name"]
     }
+    list_prefetch_related =("classroom",)
     raw_id_fields = ('classroom',)
     # list_editable = ["first_name","last_name"]
     readonly_fields = ["id","last_updated", "joined_at"]
@@ -97,6 +98,10 @@ class TeacherAdmin(admin.ModelAdmin):
     @admin.display()
     def full_name(self, obj):
         return f"{obj.first_name} {obj.last_name}"
+    
+    def count_classroom(self,tchr:Teacher):
+        count_class = tchr.classroom.count()
+        return count_class
 
 # --------------- TEACHER ADMIN -----------------
 
@@ -110,7 +115,7 @@ class StudentAdmin(admin.ModelAdmin):
     list_display = [
         "full_name",
         "username",
-        "count_classroom"
+        "count_classroom",
     ]
     list_filter = ('joined_at', 'last_updated')
     ordering = ["first_name", "last_name"]
@@ -146,6 +151,7 @@ class OptionAdmin(admin.ModelAdmin):
         "qustion",
         # "get_qus_id"
     )
+    list_select_related = ["qustion"]
 
 # --------------- Question ADMIN -----------------
 
@@ -156,10 +162,11 @@ class QustionAdmin(admin.ModelAdmin):
         "question_value",
         "id",
         "point",
-        "quizset"
+        "quizset",
     ]
     list_editable = ["point"]
     list_filter = ('updated_at', 'quizset')
+    # list_select_related = ["quizset"]
     inlines = [OptionInline]
     autocomplete_fields = [
         "quizset"

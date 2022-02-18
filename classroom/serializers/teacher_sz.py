@@ -3,7 +3,7 @@ from rest_framework.serializers import ModelSerializer as ms,SerializerMethodFie
 
 class TeacherSerializer(ms):
     no_of_classrooms =  method_field(method_name='get_assosiated_classroom_no')
-    # quizsets = href('quizset-list',many=True,read_only=True)
+    quizsets = href('quizset-detail',many=True,read_only=True)
     class Meta:
         model = Teacher
         fields = (

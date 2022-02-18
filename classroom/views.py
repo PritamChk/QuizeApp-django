@@ -19,25 +19,25 @@ from .serializer import (
         QuestionSerializer,
     )
 
-def show_students(request):
-    qset = Student.objects.all()
-    return render(request,'index.html',{"students":list(qset)})
+# def show_students(request):
+#     qset = Student.objects.all()
+#     return render(request,'index.html',{"students":list(qset)})
     
 
-class ClassRoomListView(ModelViewSet):
+class ClassRoomView(ModelViewSet):
     queryset = Classroom.objects.all()
     serializer_class = ClassRoomSerializer
    
 
-class TeacherViewList(ModelViewSet):
-    queryset = Teacher.objects.all()
+class TeacherViewSet(ModelViewSet):
+    queryset = Teacher.objects.prefetch_related('quizsets').all()
     serializer_class = TeacherSerializer
 
-class QuestionSetViewList(ModelViewSet):
+class QuestionSetView(ModelViewSet):
     queryset = Question.objects.select_related('quizset').prefetch_related('options').all()
     serializer_class = QuestionSerializer
 
-class QuizSetViewList(ModelViewSet):
+class QuizSetView(ModelViewSet):
     queryset = QuizSet.objects.all()
     serializer_class = QuizSetSerializer
     

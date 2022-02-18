@@ -30,6 +30,7 @@ class QuestionSerializer(ms):
         >    - with options
     """
     options = OptionSerializer(Option,many = True)
+    quizset = href(view_name='quizset-detail',read_only=True)
     class Meta:
         model = Question
         fields = [ 
@@ -44,10 +45,11 @@ class QuestionSerializer(ms):
     
 class QuizSetSerializer(ms):
     # qustions= QuestionSerializer(Question,many=True)
+    qustions= href(view_name='qus-set',many=True,read_only= True)
     qustions= href(
         many = True,
         read_only = True,
-        view_name='quizset-detail'
+        view_name='qus-detail'
     )
     class Meta:
         model = QuizSet

@@ -24,7 +24,7 @@ def show_students(request):
     return render(request,'index.html',{"students":list(qset)})
     
 
-class ClassRoomListView(ListCreateAPIView):
+class ClassRoomListView(ModelViewSet):
     queryset = Classroom.objects.all()
     serializer_class = ClassRoomSerializer
    
@@ -33,12 +33,12 @@ class TeacherViewList(ModelViewSet):
     queryset = Teacher.objects.all()
     serializer_class = TeacherSerializer
 
-class QuestionSetViewList(ListCreateAPIView):
+class QuestionSetViewList(ModelViewSet):
     queryset = Question.objects.select_related('quizset').prefetch_related('options').all()
     serializer_class = QuestionSerializer
 
-class QuizSetSetViewList(ListCreateAPIView):
-    queryset = QuizSet.objects.prefetch_related('qustions').all()
+class QuizSetViewList(ModelViewSet):
+    queryset = QuizSet.objects.all()
     serializer_class = QuizSetSerializer
     
             

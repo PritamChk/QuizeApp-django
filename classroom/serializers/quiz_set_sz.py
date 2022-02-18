@@ -2,6 +2,7 @@ from rest_framework.serializers import (
     ModelSerializer as ms ,
     SerializerMethodField as method_field,
     PrimaryKeyRelatedField as pkf,
+    HyperlinkedRelatedField as href
     )
 
 from ..models import Option, Question, QuizEvent, QuizSet
@@ -42,7 +43,12 @@ class QuestionSerializer(ms):
         # depth = 1
     
 class QuizSetSerializer(ms):
-    qustions= QuestionSerializer(Question,many=True)
+    # qustions= QuestionSerializer(Question,many=True)
+    qustions= href(
+        many = True,
+        read_only = True,
+        view_name='quizset-detail'
+    )
     class Meta:
         model = QuizSet
         fields = [

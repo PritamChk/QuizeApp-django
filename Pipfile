@@ -9,6 +9,7 @@ mysqlclient = "*"
 psycopg2 = "*"
 djangorestframework = "*"
 drf-nested-routers = "*"
+djoser = "*"
 
 [dev-packages]
 autopep8 = "*"
